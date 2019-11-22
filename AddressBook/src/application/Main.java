@@ -1,6 +1,7 @@
 package application;
 	
 import application.controller.AddressBookController;
+import application.controller.PersonController;
 import application.model.Person;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -11,12 +12,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.fxml.FXMLLoader;
 
 
-public class Main extends Application {
+public class Main extends Application 
+{
 	
 	
 	
 	@Override
-	public void start(Stage primaryStage) {
+	public void start(Stage primaryStage)
+	{
 		try {
 			FXMLLoader loader= new FXMLLoader(Main.class.getResource("view/AddressBookView.fxml"));
 			AnchorPane pane = loader.load();
@@ -32,23 +35,27 @@ public class Main extends Application {
 		}
 	}
 	
-	public void PersonController()
+	public boolean PersonController(Person person)
 	{
 		try {
-			FXMLLoader loader= new FXMLLoader(Main.class.getResource("view/NewPersonView.fxml"));
+			FXMLLoader loader= new FXMLLoader(Main.class.getResource("view/PersonView.fxml"));
 			AnchorPane pane = loader.load();
 			Scene scene = new Scene(pane);
 			PersonController controller = loader.getController();
 			Stage stage = new Stage();
-			controller.setMain(this, stage);
+			controller.setMain(this, stage, person);
 			
 			stage.setScene(scene);
 			stage.setResizable(false);
-			stage.show();
+			stage.showAndWait();
+			return controller.isOkClicked();
 		} catch(Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
+	
+	
 	private ObservableList<Person> personData = FXCollections.observableArrayList();
 	public ObservableList<Person> getPersonData(){
 		return personData;

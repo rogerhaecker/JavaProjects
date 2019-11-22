@@ -21,40 +21,74 @@ public class AddressBookController {
 	@FXML TableColumn<Person, String> colLastName;
 	private Main main;
 	
-	public void setMain(Main main) {
+	public void setMain(Main main) 
+	{
 		this.main = main;
 		System.out.println(this.main.getPersonData().get(0).getFirstName());
 		tableView.setItems(main.getPersonData());
 		
 	}
 	
-	public void initialize() {
+	public void initialize() 
+	{
 		colFirstName.setCellValueFactory(new PropertyValueFactory<Person, String>("firstName"));
 		colLastName.setCellValueFactory(new PropertyValueFactory<Person, String>("lastName"));
 		
 		tableView.getSelectionModel().selectedItemProperty().addListener(
 				(observableList, oldValue, newValue) -> showDetails(newValue));
+		
 	}
 	
-	private void showDetails(Person person) {
-		lblFirstName.setText(person.getFirstName());
-		lblLastName.setText(person.getLastName());
-		lblPhone.setText(person.getPhoneNumber());
-		lblCity.setText(person.getCity());
-		lblStreet.setText(person.getStreet());
-		lblState.setText(person.getState());
-		lblZipCode.setText(person.getZipCode());
-		
+	private void showDetails(Person person)
+	{
+		if(person != null)
+		{
+			lblFirstName.setText(person.getFirstName());
+			lblLastName.setText(person.getLastName());
+			lblPhone.setText(person.getPhoneNumber());
+			lblCity.setText(person.getCity());
+			lblStreet.setText(person.getStreet());
+			lblState.setText(person.getState());
+			lblZipCode.setText(person.getZipCode());
+		}
 	}
 
-	public void handleNew() {
-		main.PersonController();
+	public void refreshTableView()
+	{
+		tableView.setItems(null);
+		tableView.layout();
+		tableView.setItems(main.getPersonData());
+		lblFirstName.setText("");
+		lblLastName.setText("");
+		lblPhone.setText("");
+		lblCity.setText("");
+		lblStreet.setText("");
+		lblState.setText("");
+		lblZipCode.setText("");
+	}
+	public void handleNew()
+	{
+		main.PersonController(null);
 		
 	}
-	public void handleEdit() {
+	public void handleEdit() 
+	{
 		
+		Person person = tableView.getSelectionModel().getSelectedItem();
+		if(person != null)
+		{
+			boolean okClicked = main.PersonController(person);
+			if(okClicked)
+			{
+				refreshTableView();
+			}
+		}
+	
 	}
-	public void handleDelete() {
+	public void handleDelete()
+	{
+		int index = tableView.getSelectionModel().getSelectedIndex();
+		 main.getPersonData().remove(index);
 		
 	}
 	
